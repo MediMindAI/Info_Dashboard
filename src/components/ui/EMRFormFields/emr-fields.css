@@ -1,0 +1,400 @@
+/**
+ * EMRFormFields - Standardized Form Input Styles (trimmed for info-display)
+ */
+
+/* ==================== BASE INPUT STYLES ==================== */
+.emr-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--emr-input-label-spacing);
+  width: fit-content;
+  min-width: 150px;
+  position: relative;
+}
+
+.emr-field-wrapper.full-width {
+  width: 100%;
+  min-width: unset;
+}
+
+/* ==================== LABEL STYLES ==================== */
+.emr-field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--emr-input-label-size);
+  font-weight: var(--emr-input-label-weight);
+  color: var(--emr-input-label-color);
+  line-height: var(--emr-line-height-1-4);
+  letter-spacing: var(--emr-letter-spacing-wide);
+  text-transform: none;
+}
+
+.emr-field-label-required {
+  color: var(--emr-input-required-color);
+  font-size: var(--emr-font-md);
+  font-weight: var(--emr-font-bold);
+  margin-left: 2px;
+}
+
+/* ==================== INPUT BASE STYLES ==================== */
+.emr-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--emr-input-height-md);
+  padding: var(--emr-input-padding-y) var(--emr-input-padding-x);
+  font-size: var(--emr-input-font-size);
+  font-family: inherit;
+  color: var(--emr-input-text);
+  background: var(--emr-input-bg-solid);
+  border: var(--emr-input-border-width) solid var(--emr-input-border);
+  border-radius: var(--emr-input-border-radius);
+  outline: none;
+  transition: var(--emr-input-transition);
+  box-sizing: border-box;
+  box-shadow: var(--emr-input-shadow);
+}
+
+/* Size variants */
+.emr-input.size-sm {
+  min-height: var(--emr-input-height-sm);
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.emr-input.size-md {
+  min-height: var(--emr-input-height-md);
+}
+
+.emr-input.size-lg {
+  min-height: var(--emr-input-height-lg);
+  padding: 14px 16px;
+  font-size: var(--emr-font-lg);
+}
+
+/* Placeholder */
+.emr-input::placeholder {
+  color: var(--emr-input-placeholder);
+  opacity: 1;
+  font-style: italic;
+}
+
+/* Hover state */
+.emr-input:hover:not(:disabled):not(:focus):not(.has-error) {
+  border-color: var(--emr-input-border-hover);
+  box-shadow: var(--emr-input-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* Focus state */
+.emr-input:focus,
+.emr-input:focus-within {
+  border-color: var(--emr-input-border-focus);
+  box-shadow: var(--emr-input-shadow-focus);
+  background-color: var(--emr-input-bg-focus);
+  transform: translateY(-1px);
+}
+
+/* Disabled state */
+.emr-input:disabled,
+.emr-input.disabled {
+  background-color: var(--emr-input-bg-disabled);
+  color: var(--emr-input-text-disabled);
+  cursor: not-allowed;
+  box-shadow: none;
+  border-style: dashed;
+}
+
+/* Read-only state */
+.emr-input:read-only:not(:disabled) {
+  background-color: var(--emr-input-bg-disabled);
+  cursor: default;
+  box-shadow: none;
+}
+
+/* ==================== VALIDATION STATES ==================== */
+.emr-input.has-error,
+.emr-field-wrapper.has-error .emr-input {
+  border-color: var(--emr-input-error-border);
+  background-color: var(--emr-input-error-bg);
+}
+
+.emr-input.has-error:focus,
+.emr-field-wrapper.has-error .emr-input:focus {
+  box-shadow: var(--emr-input-error-glow);
+}
+
+.emr-input.has-success,
+.emr-field-wrapper.has-success .emr-input {
+  border-color: var(--emr-input-success-border);
+  background-color: var(--emr-input-success-bg);
+}
+
+.emr-input.has-success:focus,
+.emr-field-wrapper.has-success .emr-input:focus {
+  box-shadow: var(--emr-input-success-glow);
+}
+
+.emr-input.has-warning,
+.emr-field-wrapper.has-warning .emr-input {
+  border-color: var(--emr-input-warning-border);
+  background-color: var(--emr-input-warning-bg);
+}
+
+.emr-input.has-warning:focus,
+.emr-field-wrapper.has-warning .emr-input:focus {
+  box-shadow: var(--emr-input-warning-glow);
+}
+
+/* ==================== HELP TEXT & ERROR MESSAGE ==================== */
+.emr-field-help {
+  font-size: var(--emr-input-help-size);
+  color: var(--emr-input-help-color);
+  line-height: var(--emr-line-height-1-4);
+  margin-top: 2px;
+}
+
+.emr-field-error {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--emr-input-help-size);
+  color: var(--emr-input-error-text);
+  line-height: var(--emr-line-height-1-4);
+  margin-top: 2px;
+}
+
+.emr-field-success {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--emr-input-help-size);
+  color: var(--emr-input-success-text);
+  line-height: var(--emr-line-height-1-4);
+  margin-top: 2px;
+}
+
+.emr-field-warning {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--emr-input-help-size);
+  color: var(--emr-input-warning-text);
+  line-height: var(--emr-line-height-1-4);
+  margin-top: 2px;
+}
+
+/* ==================== INPUT WITH SECTIONS ==================== */
+.emr-input.has-left-section {
+  padding-left: 44px;
+}
+
+.emr-input.has-right-section {
+  padding-right: 40px;
+}
+
+.emr-input-clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--emr-input-icon-color);
+  cursor: pointer;
+  transition: var(--emr-input-transition);
+}
+
+.emr-input-clear-btn:hover {
+  background-color: var(--emr-bg-hover);
+  color: var(--emr-input-text);
+}
+
+/* ==================== TEXTAREA SPECIFIC ==================== */
+.emr-textarea {
+  resize: vertical;
+  min-height: 80px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: var(--emr-line-height-base);
+}
+
+.emr-textarea.no-resize {
+  resize: none;
+}
+
+.emr-textarea-counter {
+  display: flex;
+  justify-content: flex-end;
+  font-size: var(--emr-input-help-size);
+  color: var(--emr-input-help-color);
+  margin-top: 4px;
+}
+
+.emr-textarea-counter.at-limit {
+  color: var(--emr-input-warning-text);
+}
+
+.emr-textarea-counter.over-limit {
+  color: var(--emr-input-error-text);
+}
+
+/* ==================== SELECT SPECIFIC ==================== */
+.emr-select-input {
+  cursor: pointer;
+}
+
+.emr-select-input:disabled {
+  cursor: not-allowed;
+}
+
+/* ==================== MANTINE OVERRIDES ==================== */
+.emr-field-wrapper .mantine-TextInput-input,
+.emr-field-wrapper .mantine-Select-input,
+.emr-field-wrapper .mantine-NumberInput-input,
+.emr-field-wrapper .mantine-Textarea-input,
+.emr-field-wrapper .mantine-PasswordInput-input {
+  min-height: var(--emr-input-height-md) !important;
+  font-size: var(--emr-input-font-size) !important;
+  border: var(--emr-input-border-width) solid var(--emr-input-border) !important;
+  border-radius: var(--emr-input-border-radius) !important;
+  box-shadow: var(--emr-input-shadow) !important;
+  transition: var(--emr-input-transition) !important;
+  padding: var(--emr-input-padding-y) var(--emr-input-padding-x) !important;
+  background-color: var(--emr-input-bg-solid) !important;
+}
+
+/* Left section padding fix */
+.emr-field-wrapper .mantine-TextInput-wrapper:has(.mantine-TextInput-section[data-position="left"]) .mantine-TextInput-input,
+.emr-field-wrapper .mantine-Select-wrapper:has(.mantine-Select-section[data-position="left"]) .mantine-Select-input,
+.emr-field-wrapper .mantine-NumberInput-wrapper:has(.mantine-NumberInput-section[data-position="left"]) .mantine-NumberInput-input {
+  padding-left: 40px !important;
+}
+
+/* Hover state */
+.emr-field-wrapper .mantine-TextInput-input:hover:not(:disabled):not(:focus),
+.emr-field-wrapper .mantine-Select-input:hover:not(:disabled):not(:focus),
+.emr-field-wrapper .mantine-NumberInput-input:hover:not(:disabled):not(:focus),
+.emr-field-wrapper .mantine-Textarea-input:hover:not(:disabled):not(:focus),
+.emr-field-wrapper .mantine-PasswordInput-input:hover:not(:disabled):not(:focus) {
+  border-color: var(--emr-input-border-hover) !important;
+  box-shadow: var(--emr-input-shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* Focus state */
+.emr-field-wrapper .mantine-TextInput-input:focus,
+.emr-field-wrapper .mantine-Select-input:focus,
+.emr-field-wrapper .mantine-NumberInput-input:focus,
+.emr-field-wrapper .mantine-Textarea-input:focus,
+.emr-field-wrapper .mantine-PasswordInput-input:focus {
+  border-color: var(--emr-input-border-focus) !important;
+  box-shadow: var(--emr-input-shadow-focus) !important;
+  transform: translateY(-1px);
+}
+
+/* Error state */
+.emr-field-wrapper.has-error .mantine-TextInput-input,
+.emr-field-wrapper.has-error .mantine-Select-input,
+.emr-field-wrapper.has-error .mantine-NumberInput-input,
+.emr-field-wrapper.has-error .mantine-Textarea-input,
+.emr-field-wrapper.has-error .mantine-PasswordInput-input {
+  border-color: var(--emr-input-error-border) !important;
+  background-color: var(--emr-input-error-bg) !important;
+  box-shadow: var(--emr-input-error-glow) !important;
+}
+
+/* Select dropdown styling */
+.emr-field-wrapper .mantine-Select-dropdown,
+.mantine-Select-dropdown,
+.mantine-Combobox-dropdown {
+  border-radius: var(--emr-input-border-radius) !important;
+  box-shadow: var(--emr-shadow-lg) !important;
+  border: 1px solid var(--emr-input-border) !important;
+  background-color: var(--emr-bg-card) !important;
+}
+
+.emr-field-wrapper .mantine-Select-option,
+.mantine-Select-option,
+.mantine-Combobox-option {
+  padding: 10px 14px !important;
+  border-radius: 6px !important;
+  margin: 2px 4px !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  color: var(--emr-text-primary) !important;
+  background-color: transparent !important;
+}
+
+.emr-field-wrapper .mantine-Select-option:hover,
+.emr-field-wrapper .mantine-Select-option[data-hovered],
+.mantine-Select-option:hover,
+.mantine-Select-option[data-hovered],
+.mantine-Combobox-option:hover,
+.mantine-Combobox-option[data-combobox-hovered] {
+  background-color: var(--emr-bg-hover) !important;
+}
+
+.emr-field-wrapper .mantine-Select-option[data-selected],
+.mantine-Select-option[data-selected],
+.mantine-Combobox-option[data-combobox-selected] {
+  background-color: var(--emr-secondary) !important;
+  color: var(--emr-text-inverse) !important;
+}
+
+/* Hide default Mantine error/label when using EMR wrapper */
+.emr-field-wrapper .mantine-InputWrapper-label,
+.emr-field-wrapper .mantine-InputWrapper-error {
+  display: none;
+}
+
+/* ==================== DARK MODE ==================== */
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-TextInput-input,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-Select-input,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-NumberInput-input,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-Textarea-input,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-PasswordInput-input {
+  background-color: var(--emr-input-bg-solid) !important;
+  background: var(--emr-input-bg) !important;
+  border-color: var(--emr-input-border) !important;
+  color: var(--emr-input-text) !important;
+}
+
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-TextInput-input:focus,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-Select-input:focus,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-NumberInput-input:focus,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-Textarea-input:focus,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-PasswordInput-input:focus {
+  background-color: var(--emr-input-bg-focus) !important;
+  border-color: var(--emr-input-border-focus) !important;
+  box-shadow: var(--emr-input-shadow-focus) !important;
+}
+
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-TextInput-input:disabled,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-Select-input:disabled,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-NumberInput-input:disabled,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-Textarea-input:disabled,
+[data-mantine-color-scheme="dark"] .emr-field-wrapper .mantine-PasswordInput-input:disabled {
+  background-color: var(--emr-input-bg-disabled) !important;
+  color: var(--emr-input-text-disabled) !important;
+}
+
+/* ==================== MOBILE TOUCH TARGETS ==================== */
+@media (max-width: 768px) {
+  .emr-input {
+    min-height: 44px;
+    font-size: var(--emr-font-lg);
+  }
+}
+
+/* ==================== REDUCED MOTION ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .emr-input {
+    transition: none;
+  }
+}

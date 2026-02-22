@@ -1,0 +1,157 @@
+/* Info Display Theme - Subset of EMR theme.css variables */
+
+:root {
+  /* Core colors */
+  --emr-primary: #1a365d;
+  --emr-secondary: #2b6cb0;
+  --emr-accent: #3182ce;
+  --emr-light-accent: #bee3f8;
+
+  /* Text */
+  --emr-text-primary: #1f2937;
+  --emr-text-secondary: #6b7280;
+  --emr-text-inverse: #ffffff;
+
+  /* Surfaces */
+  --emr-bg-page: #ffffff;
+  --emr-bg-card: #ffffff;
+  --emr-bg-modal: #ffffff;
+  --emr-bg-input: #ffffff;
+  --emr-bg-hover: #f7fafc;
+
+  /* Borders */
+  --emr-border-color: #e5e7eb;
+  --emr-border-default: #e5e7eb;
+
+  /* Semantic */
+  --emr-success: #38a169;
+  --emr-warning: #dd6b20;
+  --emr-error: #e53e3e;
+  --emr-info: #3182ce;
+
+  /* Gradient */
+  --emr-gradient-primary: linear-gradient(135deg, #1a365d 0%, #2b6cb0 50%, #3182ce 100%);
+
+  /* Typography */
+  --emr-font-xs: 11px;
+  --emr-font-sm: 13px;
+  --emr-font-md: 14px;
+  --emr-font-lg: 16px;
+  --emr-font-xl: 18px;
+  --emr-font-2xl: 20px;
+  --emr-font-3xl: 24px;
+
+  /* Font weights */
+  --emr-font-normal: 400;
+  --emr-font-medium: 500;
+  --emr-font-semibold: 600;
+  --emr-font-bold: 700;
+
+  /* Shadows */
+  --emr-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --emr-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --emr-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+  /* Line heights & letter spacing */
+  --emr-line-height-base: 1.5;
+  --emr-line-height-1-4: 1.4;
+  --emr-letter-spacing-wide: 0.01em;
+  --emr-border-radius-sm: 6px;
+
+  /* Input system */
+  --emr-input-height-xs: 30px;
+  --emr-input-height-sm: 38px;
+  --emr-input-height-md: 44px;
+  --emr-input-height-lg: 50px;
+  --emr-input-height-xl: 56px;
+  --emr-input-bg: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+  --emr-input-bg-solid: #ffffff;
+  --emr-input-bg-disabled: #f3f4f6;
+  --emr-input-bg-focus: #ffffff;
+  --emr-input-border: #c7d2e0;
+  --emr-input-border-hover: #3182ce;
+  --emr-input-border-focus: #2b6cb0;
+  --emr-input-text: #1a202c;
+  --emr-input-text-disabled: #a0aec0;
+  --emr-input-placeholder: #a0aec0;
+  --emr-input-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --emr-input-shadow-hover: 0 4px 12px rgba(49, 130, 206, 0.15);
+  --emr-input-shadow-focus: 0 0 0 3px rgba(49, 130, 206, 0.25), 0 4px 12px rgba(49, 130, 206, 0.1);
+  --emr-input-error-border: #e53e3e;
+  --emr-input-error-bg: #fff5f5;
+  --emr-input-error-text: #c53030;
+  --emr-input-error-glow: 0 0 0 3px rgba(229, 62, 62, 0.25);
+  --emr-input-success-border: #38a169;
+  --emr-input-success-bg: #f0fff4;
+  --emr-input-success-text: #276749;
+  --emr-input-success-glow: 0 0 0 3px rgba(56, 161, 105, 0.25);
+  --emr-input-warning-border: #dd6b20;
+  --emr-input-warning-bg: #fffaf0;
+  --emr-input-warning-text: #c05621;
+  --emr-input-warning-glow: 0 0 0 3px rgba(221, 107, 32, 0.25);
+  --emr-input-focus-ring: 0 0 0 3px rgba(49, 130, 206, 0.3);
+  --emr-input-label-color: #374151;
+  --emr-input-label-size: 13px;
+  --emr-input-label-weight: 600;
+  --emr-input-label-spacing: 6px;
+  --emr-input-help-color: #6b7280;
+  --emr-input-help-size: 12px;
+  --emr-input-required-color: #e53e3e;
+  --emr-input-padding-x: 14px;
+  --emr-input-padding-y: 10px;
+  --emr-input-border-radius: 10px;
+  --emr-input-font-size: 14px;
+  --emr-input-border-width: 1.5px;
+  --emr-input-icon-color: #a0aec0;
+  --emr-input-icon-size: 18px;
+  --emr-input-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode */
+:root[data-mantine-color-scheme="dark"] {
+  --emr-primary: #3182ce;
+  --emr-secondary: #3182ce;
+  --emr-accent: #3182ce;
+  --emr-light-accent: #1a365d;
+
+  --emr-text-primary: #f1f5f9;
+  --emr-text-secondary: #94a3b8;
+  --emr-text-inverse: #0f172a;
+
+  --emr-bg-page: #0f172a;
+  --emr-bg-card: #1e293b;
+  --emr-bg-modal: #1e293b;
+  --emr-bg-input: #1e293b;
+  --emr-bg-hover: #334155;
+
+  --emr-border-color: #334155;
+  --emr-border-default: #334155;
+
+  --emr-gradient-primary: linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%);
+
+  /* Input overrides for dark mode */
+  --emr-input-bg: linear-gradient(180deg, #1e293b 0%, #1a2332 100%);
+  --emr-input-bg-solid: #1e293b;
+  --emr-input-bg-disabled: #334155;
+  --emr-input-bg-focus: #1e293b;
+  --emr-input-border: #475569;
+  --emr-input-border-hover: #60a5fa;
+  --emr-input-border-focus: #3b82f6;
+  --emr-input-text: #f1f5f9;
+  --emr-input-text-disabled: #64748b;
+  --emr-input-placeholder: #64748b;
+  --emr-input-label-color: #e2e8f0;
+  --emr-input-help-color: #94a3b8;
+  --emr-input-icon-color: #94a3b8;
+  --emr-input-error-bg: rgba(229, 62, 62, 0.1);
+  --emr-input-success-bg: rgba(56, 161, 105, 0.1);
+  --emr-input-warning-bg: rgba(221, 107, 32, 0.1);
+}
+
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'Noto Sans Georgian', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--emr-bg-page);
+  color: var(--emr-text-primary);
+}

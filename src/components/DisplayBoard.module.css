@@ -1,0 +1,234 @@
+/* Full-screen TV display - designed to be readable from across a room */
+
+.container {
+  min-height: 100vh;
+  background: var(--emr-bg-page);
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  background: var(--emr-gradient-primary);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(26, 54, 93, 0.25);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: var(--emr-font-sm);
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.clock {
+  font-size: 32px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: white;
+}
+
+/* ── Card Grid ───────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  flex: 1;
+  align-content: start;
+}
+
+.card {
+  background: var(--emr-bg-card);
+  border: 1px solid var(--emr-border-color);
+  border-radius: 16px;
+  padding: 20px 24px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--emr-accent);
+  border-radius: 16px 16px 0 0;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Ongoing: blue accent top bar */
+.cardOngoing::before {
+  background: linear-gradient(90deg, var(--emr-accent), var(--emr-secondary));
+  height: 3px;
+}
+
+/* Finished: green accent top bar */
+.cardFinished::before {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  height: 3px;
+}
+
+.cardFinished {
+  opacity: 0.7;
+}
+
+/* ── Card Layout ─────────────────────────────────────── */
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.patientName {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--emr-text-primary);
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+.trackingCode {
+  font-size: var(--emr-font-sm);
+  font-weight: 600;
+  color: var(--emr-accent);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  letter-spacing: 0.5px;
+}
+
+.procedureBadge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: var(--emr-font-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--emr-light-accent);
+  color: var(--emr-secondary);
+}
+
+.badge_ongoing {
+  background: rgba(49, 130, 206, 0.12);
+  color: var(--emr-accent);
+}
+
+.badge_finished {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+/* ── Card Meta Row (room, elapsed, remaining) ────────── */
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.cardMetaItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--emr-font-sm);
+  color: var(--emr-text-secondary);
+}
+
+.elapsedTime {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--emr-text-primary);
+}
+
+.overtime .elapsedTime {
+  color: var(--emr-error);
+}
+
+.remainingText {
+  font-size: var(--emr-font-xs);
+  color: var(--emr-text-secondary);
+  font-style: italic;
+}
+
+/* ── Progress Bar ────────────────────────────────────── */
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background: var(--emr-border-color);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+.cardTimeline {
+  padding-top: 4px;
+}
+
+/* ── Empty & Footer ──────────────────────────────────── */
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+}
+
+.footer {
+  text-align: center;
+  padding: 12px 0 0;
+  font-size: var(--emr-font-xs);
+  color: var(--emr-text-secondary);
+}

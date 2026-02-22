@@ -1,0 +1,432 @@
+/* Staff Admin Panel Styles */
+
+.page {
+  min-height: 100vh;
+  background: var(--emr-bg-page);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--emr-gradient-primary);
+  color: white;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.headerTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  color: white;
+}
+
+.headerSubtitle {
+  font-size: var(--emr-font-xs);
+  opacity: 0.8;
+  margin-top: 1px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Stats Strip ─────────────────────────────────────── */
+
+.statsStrip {
+  display: flex;
+  gap: 14px;
+  padding: 18px 28px;
+  flex-wrap: wrap;
+}
+
+.statCard {
+  flex: 1;
+  min-width: 150px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--emr-shadow-sm);
+  border: 1px solid var(--emr-border-color);
+  background: var(--emr-bg-card);
+}
+
+.statIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statIconRegistered {
+  background: rgba(49, 130, 206, 0.12);
+  color: var(--emr-accent);
+}
+
+.statIconOngoing {
+  background: rgba(221, 107, 32, 0.12);
+  color: var(--emr-warning);
+}
+
+.statIconFinished {
+  background: rgba(56, 161, 105, 0.12);
+  color: var(--emr-success);
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--emr-text-primary);
+}
+
+.statLabel {
+  font-size: var(--emr-font-sm);
+  color: var(--emr-text-secondary);
+  margin-top: 2px;
+}
+
+/* ── Filter Bar ──────────────────────────────────────── */
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 28px 16px;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+}
+
+.filterChips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filterChip {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: var(--emr-font-sm);
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--emr-border-color);
+  background: var(--emr-bg-card);
+  color: var(--emr-text-secondary);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.filterChip:hover {
+  border-color: var(--emr-accent);
+  color: var(--emr-accent);
+}
+
+.filterChipActive {
+  background: var(--emr-accent);
+  color: white;
+  border-color: var(--emr-accent);
+}
+
+.filterChipActive:hover {
+  color: white;
+}
+
+/* ── Table ────────────────────────────────────────────── */
+
+.tableWrapper {
+  padding: 0 28px 28px;
+  flex: 1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--emr-bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--emr-border-color);
+  box-shadow: var(--emr-shadow-sm);
+}
+
+.table thead th {
+  background: var(--emr-bg-hover);
+  padding: 12px 16px;
+  font-size: var(--emr-font-sm);
+  font-weight: 600;
+  color: var(--emr-text-secondary);
+  text-align: left;
+  border-bottom: 1px solid var(--emr-border-color);
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background: var(--emr-bg-hover);
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  font-size: var(--emr-font-md);
+  color: var(--emr-text-primary);
+  border-bottom: 1px solid var(--emr-border-color);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Phase-colored left border */
+.rowRegistered td:first-child {
+  border-left: 3px solid var(--emr-accent);
+}
+
+.rowOngoing td:first-child {
+  border-left: 3px solid var(--emr-warning);
+}
+
+.rowFinished td:first-child {
+  border-left: 3px solid var(--emr-success);
+}
+
+.rowFinished {
+  opacity: 0.65;
+}
+
+/* ── Cell Styles ──────────────────────────────────────── */
+
+.codeCell {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 700;
+  color: var(--emr-accent);
+  letter-spacing: 0.5px;
+}
+
+.elapsedCell {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.durationBar {
+  width: 100%;
+  height: 4px;
+  background: var(--emr-border-color);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.durationFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ── Empty State ──────────────────────────────────────── */
+
+.emptyState {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--emr-text-secondary);
+}
+
+.emptyIcon {
+  opacity: 0.3;
+  margin-bottom: 12px;
+}
+
+/* ── Edit Modal ──────────────────────────────────────── */
+
+.editModalHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--emr-gradient-primary);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.editModalHeaderIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.editModalHeaderInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.editModalHeaderName {
+  font-size: var(--emr-font-xl);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.editModalHeaderCode {
+  font-size: var(--emr-font-sm);
+  opacity: 0.8;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.editModalHeaderBadge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: var(--emr-font-sm);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.editSection {
+  margin-bottom: 24px;
+}
+
+.editSectionLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--emr-font-sm);
+  font-weight: 600;
+  color: var(--emr-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--emr-border-color);
+}
+
+.editFieldGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.editFieldFull {
+  grid-column: 1 / -1;
+}
+
+.phaseSelector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.phaseOption {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--emr-border-color);
+  background: var(--emr-bg-card);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--emr-text-primary);
+}
+
+.phaseOption:hover {
+  border-color: var(--emr-accent);
+}
+
+.phaseOptionActive {
+  border-color: var(--emr-accent);
+  background: rgba(49, 130, 206, 0.06);
+}
+
+.phaseOptionDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.phaseOptionLabel {
+  font-size: var(--emr-font-md);
+  font-weight: 500;
+}
+
+.editFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--emr-border-color);
+}
+
+@media (max-width: 600px) {
+  .editFieldGrid {
+    grid-template-columns: 1fr;
+  }
+  .phaseSelector {
+    flex-direction: column;
+  }
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 16px;
+  }
+  .statsStrip {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .statCard {
+    min-width: 120px;
+    padding: 12px 14px;
+  }
+  .statValue {
+    font-size: 22px;
+  }
+  .filterBar {
+    padding: 0 16px 12px;
+  }
+  .tableWrapper {
+    padding: 0 16px 16px;
+    overflow-x: auto;
+  }
+}
