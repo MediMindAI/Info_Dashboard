@@ -117,6 +117,8 @@ export function StaffPanel(): JSX.Element {
           await medplum.processCode(profileResponse.code);
         }
       }
+      // Login succeeded — clear the logout flag so admin panel shows
+      localStorage.removeItem('adminLoggedOut');
     } catch (err) {
       setLoginError(err instanceof Error ? err.message : 'Login failed');
     } finally {
@@ -124,8 +126,8 @@ export function StaffPanel(): JSX.Element {
     }
   };
 
-  // If not logged in, show login form
-  if (!profile) {
+  // If not logged in or admin explicitly logged out, show login form
+  if (!profile || localStorage.getItem('adminLoggedOut') === 'true') {
     return (
       <Center mih="100vh" style={{ background: 'var(--emr-bg-page)' }}>
         <Stack align="center" gap="lg" style={{ width: 340 }}>
@@ -263,8 +265,9 @@ export function StaffPanel(): JSX.Element {
   };
 
   const handleLogout = () => {
-    medplum.signOut();
-    window.location.reload();
+    medplum.clear();
+    localStorage.setItem('adminLoggedOut', 'true');
+    window.location.href = '/admin';
   };
 
   const toggleTheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
