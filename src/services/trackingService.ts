@@ -5,7 +5,7 @@
 
 import type { MedplumClient } from '@medplum/core';
 import type { Basic, Extension } from '@medplum/fhirtypes';
-import type { TrackingEntry, SurgicalPhase, ProcedureType } from '../types/tracking';
+import type { TrackingEntry, SurgicalPhase, ProcedureType, Department } from '../types/tracking';
 import { PHASES } from '../types/tracking';
 import {
   TRACKING_CODE_SYSTEM,
@@ -89,7 +89,8 @@ export function parseBasicToEntry(basic: Basic): TrackingEntry {
     patientName: getExtString(ext, TRACKING_EXTENSIONS.PATIENT_NAME),
     currentPhase: normalizePhase(getExtCode(ext, TRACKING_EXTENSIONS.CURRENT_PHASE)),
     phaseUpdatedAt: getExtDateTime(ext, TRACKING_EXTENSIONS.PHASE_UPDATED_AT),
-    procedureType: (getExtString(ext, TRACKING_EXTENSIONS.PROCEDURE_TYPE) || 'surgery') as ProcedureType,
+    procedureType: getExtString(ext, TRACKING_EXTENSIONS.PROCEDURE_TYPE) || '',
+    department: getExtString(ext, TRACKING_EXTENSIONS.DEPARTMENT) || 'general-surgery',
     notes: getExtString(ext, TRACKING_EXTENSIONS.NOTES),
     roomNumber: getExtString(ext, TRACKING_EXTENSIONS.ROOM_NUMBER),
     doctorName: getExtString(ext, TRACKING_EXTENSIONS.DOCTOR_NAME),
@@ -102,6 +103,7 @@ function buildBasicResource(params: {
   patientName: string;
   phase: SurgicalPhase;
   procedureType: ProcedureType;
+  department: Department;
   notes: string;
   roomNumber?: string;
   doctorName?: string;
@@ -113,6 +115,7 @@ function buildBasicResource(params: {
     { url: TRACKING_EXTENSIONS.CURRENT_PHASE, valueCode: params.phase },
     { url: TRACKING_EXTENSIONS.PHASE_UPDATED_AT, valueDateTime: new Date().toISOString() },
     { url: TRACKING_EXTENSIONS.PROCEDURE_TYPE, valueString: params.procedureType },
+    { url: TRACKING_EXTENSIONS.DEPARTMENT, valueString: params.department },
   ];
   if (params.notes) extensions.push({ url: TRACKING_EXTENSIONS.NOTES, valueString: params.notes });
   if (params.roomNumber) extensions.push({ url: TRACKING_EXTENSIONS.ROOM_NUMBER, valueString: params.roomNumber });
@@ -155,6 +158,7 @@ export async function createEntry(
   params: {
     patientName: string;
     procedureType: ProcedureType;
+    department: Department;
     notes: string;
     roomNumber?: string;
     doctorName?: string;
@@ -166,6 +170,7 @@ export async function createEntry(
     patientName: params.patientName,
     phase: 'registered',
     procedureType: params.procedureType,
+    department: params.department,
     notes: params.notes,
     roomNumber: params.roomNumber,
     doctorName: params.doctorName,
@@ -226,6 +231,7 @@ export async function updateEntry(
   params: {
     patientName: string;
     procedureType: ProcedureType;
+    department: Department;
     notes: string;
     roomNumber: string;
     doctorName: string;
@@ -252,6 +258,7 @@ export async function updateEntry(
 
   setExt(TRACKING_EXTENSIONS.PATIENT_NAME, { valueString: params.patientName });
   setExt(TRACKING_EXTENSIONS.PROCEDURE_TYPE, { valueString: params.procedureType });
+  setExt(TRACKING_EXTENSIONS.DEPARTMENT, { valueString: params.department });
 
   // If phase was changed, update phase + timestamp
   if (params.phase) {

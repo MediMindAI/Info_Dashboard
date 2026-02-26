@@ -1,9 +1,10 @@
 /* Full-screen TV display - designed to be readable from across a room */
 
 .container {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: var(--emr-bg-page);
-  padding: 20px 28px;
+  padding: clamp(20px, 1.5vw, 40px) clamp(28px, 2vw, 56px);
   display: flex;
   flex-direction: column;
 }
@@ -12,24 +13,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 28px;
+  padding: clamp(16px, 1.2vw, 32px) clamp(28px, 2vw, 56px);
   background: var(--emr-gradient-primary);
-  border-radius: 16px;
-  margin-bottom: 20px;
-  color: white;
+  border-radius: clamp(16px, 1vw, 24px);
+  margin-bottom: clamp(20px, 1.5vw, 40px);
+  color: var(--emr-text-inverse);
   box-shadow: 0 4px 20px rgba(26, 54, 93, 0.25);
 }
 
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(16px, 1.2vw, 32px);
 }
 
 .title {
-  font-size: 28px;
+  font-size: clamp(28px, 2.2vw, 56px);
   font-weight: 700;
-  color: white;
+  color: var(--emr-text-inverse);
   margin: 0;
   line-height: 1.2;
 }
@@ -43,80 +44,152 @@
 .headerRight {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(16px, 1.2vw, 32px);
 }
 
 .clock {
-  font-size: 32px;
+  font-size: clamp(32px, 2.5vw, 64px);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: white;
+  color: var(--emr-text-inverse);
 }
 
-/* ── Card Grid ───────────────────────────────────────── */
+/* -- Department Sections ---------------------------------- */
+
+.departmentSection {
+  margin-bottom: clamp(24px, 2vw, 48px);
+}
+
+.departmentHeader {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 0.8vw, 16px);
+  padding: clamp(10px, 0.8vw, 20px) clamp(14px, 1vw, 28px);
+  margin-bottom: clamp(14px, 1vw, 28px);
+  background: linear-gradient(135deg, rgba(26, 54, 93, 0.08) 0%, rgba(49, 130, 206, 0.05) 100%);
+  border-left: 4px solid var(--emr-accent);
+  border-radius: 8px;
+}
+
+.departmentTitle {
+  font-size: clamp(21px, 1.6vw, 42px);
+  font-weight: 800;
+  color: var(--emr-primary);
+  letter-spacing: 0.01em;
+}
+
+.departmentCount {
+  font-size: clamp(14px, 1vw, 24px);
+  font-weight: 700;
+  padding: clamp(2px, 0.3vw, 6px) clamp(12px, 0.8vw, 20px);
+  border-radius: 20px;
+  background: var(--emr-accent);
+  color: var(--emr-text-inverse);
+  min-width: clamp(28px, 1.8vw, 44px);
+  text-align: center;
+}
+
+:global(:root[data-mantine-color-scheme="dark"]) .departmentHeader {
+  background: linear-gradient(135deg, rgba(49, 130, 206, 0.12) 0%, rgba(49, 130, 206, 0.06) 100%);
+}
+
+/* -- Card Grid -------------------------------------------- */
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(340px, 22vw, 500px), 1fr));
+  gap: clamp(16px, 1.2vw, 32px);
   flex: 1;
   align-content: start;
 }
 
-.card {
-  background: var(--emr-bg-card);
-  border: 1px solid var(--emr-border-color);
-  border-radius: 16px;
-  padding: 20px 24px 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+/* List layout: single column rows */
+.layout_list {
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
+/* -- Card (Grid View) ------------------------------------- */
+
+.card {
+  background: var(--emr-card-bg);
+  backdrop-filter: var(--emr-card-backdrop);
+  -webkit-backdrop-filter: var(--emr-card-backdrop);
+  border: 1px solid var(--emr-border-color);
+  border-radius: clamp(16px, 1vw, 24px);
+  padding: clamp(20px, 1.5vw, 40px) clamp(24px, 1.8vw, 48px) clamp(16px, 1.2vw, 32px);
+  box-shadow: var(--emr-card-shadow);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBottomSection {
+  margin-top: auto;
+}
+
+/* Top accent bar - gradient with subtle glow */
 .card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--emr-accent);
+  height: clamp(3px, 0.25vw, 6px);
+  background: linear-gradient(90deg, var(--emr-primary), var(--emr-accent));
   border-radius: 16px 16px 0 0;
 }
 
+/* Subtle inner highlight at top of card (frosted glass feel) */
+.card::after {
+  content: '';
+  position: absolute;
+  top: clamp(3px, 0.25vw, 6px);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  pointer-events: none;
+}
+
 .card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
+  box-shadow: var(--emr-card-shadow-hover);
+  transform: translateY(-2px);
 }
 
-/* Ongoing: blue accent top bar */
+/* Ongoing: animated gradient accent bar */
 .cardOngoing::before {
-  background: linear-gradient(90deg, var(--emr-accent), var(--emr-secondary));
-  height: 3px;
+  background: linear-gradient(90deg, var(--emr-secondary), var(--emr-accent));
+  height: clamp(3px, 0.25vw, 6px);
 }
 
-/* Finished: green accent top bar */
+/* Finished: lighter accent, faded card */
 .cardFinished::before {
-  background: linear-gradient(90deg, #22c55e, #4ade80);
-  height: 3px;
+  background: linear-gradient(90deg, var(--emr-accent), var(--emr-light-accent));
+  height: clamp(3px, 0.25vw, 6px);
 }
 
 .cardFinished {
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
-/* ── Card Layout ─────────────────────────────────────── */
+.cardFinished:hover {
+  opacity: 0.8;
+}
+
+/* -- Card Layout ------------------------------------------ */
 
 .cardTop {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   gap: 12px;
 }
 
-.cardInfo {
+.cardIdentity {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -124,11 +197,14 @@
 }
 
 .patientName {
-  font-size: 20px;
+  font-size: clamp(20px, 1.6vw, 40px);
   font-weight: 700;
   color: var(--emr-text-primary);
   line-height: 1.3;
   letter-spacing: -0.3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .trackingCode {
@@ -137,85 +213,242 @@
   color: var(--emr-accent);
   font-family: 'SF Mono', 'Fira Code', monospace;
   letter-spacing: 0.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.procedureBadge {
-  padding: 5px 14px;
+/* -- Info Chips (room, doctor, procedure) ----------------- */
+
+.infoChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
   border-radius: 20px;
   font-size: var(--emr-font-xs);
   font-weight: 600;
   white-space: nowrap;
+  background: rgba(49, 130, 206, 0.06);
+  color: var(--emr-text-secondary);
+  border: 1px solid var(--emr-border-color);
   flex-shrink: 0;
-  background: var(--emr-light-accent);
-  color: var(--emr-secondary);
 }
 
-.badge_ongoing {
-  background: rgba(49, 130, 206, 0.12);
+.chipProcedure {
+  background: rgba(49, 130, 206, 0.1);
   color: var(--emr-accent);
+  border-color: var(--emr-accent);
 }
 
-.badge_finished {
-  background: rgba(34, 197, 94, 0.12);
-  color: #16a34a;
-}
+/* -- Grid: Info Row (chips + time in a row) --------------- */
 
-/* ── Card Meta Row (room, elapsed, remaining) ────────── */
-
-.cardMeta {
+.cardInfoRow {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
-.cardMetaItem {
+/* -- Push timeBlock right inside cardInfoRow */
+
+.cardInfoRow .timeBlock {
+  margin-left: auto;
+}
+
+/* -- Time Display ----------------------------------------- */
+
+.timeBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeDisplay {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: var(--emr-font-sm);
-  color: var(--emr-text-secondary);
-}
-
-.elapsedTime {
-  font-weight: 600;
+  font-size: clamp(15px, 1.1vw, 28px);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--emr-text-primary);
 }
 
-.overtime .elapsedTime {
+.timeDisplay.overtime {
   color: var(--emr-error);
+  animation: overtimePulse 2s ease-in-out infinite;
 }
 
-.remainingText {
+@keyframes overtimePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.remainingBadge {
   font-size: var(--emr-font-xs);
   color: var(--emr-text-secondary);
   font-style: italic;
+  white-space: nowrap;
 }
 
-/* ── Progress Bar ────────────────────────────────────── */
+/* -- Progress Bar (rounded, gradient, subtle shine) ------- */
 
 .progressBar {
   width: 100%;
-  height: 4px;
+  height: clamp(5px, 0.4vw, 10px);
   background: var(--emr-border-color);
-  border-radius: 2px;
+  border-radius: 99px;
   margin-bottom: 10px;
   overflow: hidden;
+  position: relative;
 }
 
 .progressFill {
   height: 100%;
-  border-radius: 2px;
+  border-radius: 99px;
   transition: width 1s linear;
+  position: relative;
+  background: var(--emr-accent);
+}
+
+.progressOvertime {
+  background: var(--emr-error) !important;
+}
+
+/* Animated shine across the progress fill */
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+  border-radius: 99px 99px 0 0;
+  pointer-events: none;
 }
 
 .cardTimeline {
   padding-top: 4px;
 }
 
-/* ── Empty & Footer ──────────────────────────────────── */
+/* -- List Card Variant (3-zone layout) -------------------- */
+
+.card_list {
+  display: grid;
+  grid-template-columns: 25% 35% 40%;
+  align-items: center;
+  padding: 14px 24px;
+  border-radius: 12px;
+  gap: 0;
+}
+
+/* Subtle left status indicator for list rows */
+.card_list::before {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: 4px;
+  height: auto;
+  border-radius: 12px 0 0 12px;
+}
+
+.card_list::after {
+  display: none;
+}
+
+/* Left zone: patient identity */
+.cardLeft {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.card_list .patientName {
+  font-size: clamp(18px, 1.4vw, 36px);
+}
+
+/* Center zone: procedure, room, doctor chips */
+.cardCenter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+/* Right zone: time, progress, timeline */
+.cardRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.card_list .timeDisplay {
+  font-size: clamp(16px, 1.2vw, 30px);
+}
+
+.card_list .progressBar {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.card_list .cardTimeline {
+  padding-top: 0;
+  width: 100%;
+}
+
+/* List row hover highlight */
+.card_list:hover {
+  transform: none;
+}
+
+/* -- Page Content (fade-in on page rotate) ---------------- */
+
+.pageContent {
+  flex: 1;
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -- Page Indicator Dots ---------------------------------- */
+
+.pageIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(6px, 0.5vw, 10px);
+  padding: 4px 0 0;
+}
+
+.pageDot {
+  width: clamp(8px, 0.5vw, 12px);
+  height: clamp(8px, 0.5vw, 12px);
+  border-radius: 99px;
+  background: var(--emr-border-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.5;
+}
+
+.pageDotActive {
+  width: clamp(28px, 2vw, 48px);
+  background: var(--emr-accent);
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(49, 130, 206, 0.35);
+}
+
+/* -- Empty & Footer --------------------------------------- */
 
 .emptyState {
   flex: 1;
@@ -227,8 +460,49 @@
 }
 
 .footer {
-  text-align: center;
-  padding: 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 20px;
+  margin-top: auto;
   font-size: var(--emr-font-xs);
   color: var(--emr-text-secondary);
+  position: relative;
+}
+
+.refreshBar {
+  width: clamp(120px, 10vw, 220px);
+  height: clamp(3px, 0.25vw, 5px);
+  border-radius: 99px;
+  background: var(--emr-border-color);
+  overflow: hidden;
+  opacity: 0.6;
+}
+
+.refreshFill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--emr-secondary), var(--emr-accent));
+  animation: refreshProgress 15s linear infinite;
+}
+
+@keyframes refreshProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* -- Dark mode adjustments -------------------------------- */
+
+:global(:root[data-mantine-color-scheme="dark"]) .card::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+}
+
+:global(:root[data-mantine-color-scheme="dark"]) .infoChip {
+  background: rgba(49, 130, 206, 0.12);
+  border-color: rgba(49, 130, 206, 0.25);
+}
+
+:global(:root[data-mantine-color-scheme="dark"]) .chipProcedure {
+  background: rgba(49, 130, 206, 0.18);
 }

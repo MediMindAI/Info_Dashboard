@@ -16,12 +16,15 @@ const PHASE_ICONS = {
 } as const;
 
 /**
- * A clean 3-step progress bar: Registered → Ongoing → Finished.
- * Past steps are green with a checkmark, current pulses, future is gray.
+ * A clean 3-step progress bar: Registered -> Ongoing -> Finished.
+ * Uses a unified blue color family for all states:
+ *   - Past steps: solid accent blue with check icon
+ *   - Current step: accent blue with pulse animation
+ *   - Future steps: gray border color
  */
 export function PhaseTimeline({ currentPhase, compact }: PhaseTimelineProps): JSX.Element {
   const currentIdx = PHASES.indexOf(currentPhase);
-  const dotSize = compact ? 24 : 36;
+  const dotSize = compact ? 24 : 30;
 
   return (
     <Group gap={0} wrap="nowrap" style={{ width: '100%' }}>
@@ -29,26 +32,20 @@ export function PhaseTimeline({ currentPhase, compact }: PhaseTimelineProps): JS
         const isPast = idx < currentIdx;
         const isCurrent = idx === currentIdx;
         const isFinished = phase === 'finished' && currentPhase === 'finished';
+        const isActive = isPast || isCurrent || isFinished;
 
-        let dotBg: string;
-        let dotColor = 'white';
-        if (isPast || isFinished) {
-          dotBg = 'var(--emr-success)';
-        } else if (isCurrent) {
-          dotBg = phase === 'finished' ? 'var(--emr-success)' : 'var(--emr-accent)';
-        } else {
-          dotBg = 'var(--emr-border-color)';
-          dotColor = 'var(--emr-text-secondary)';
-        }
+        const dotBg = isActive ? 'var(--emr-accent)' : 'var(--emr-border-color)';
+        const dotColor = isActive ? 'var(--emr-text-inverse)' : 'var(--emr-text-secondary)';
 
         const Icon = PHASE_ICONS[phase];
-        const iconSize = compact ? 13 : 18;
+        const iconSize = compact ? 13 : 15;
 
         return (
           <Box
             key={phase}
             style={{
               flex: 1,
+              minWidth: 0,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -64,7 +61,7 @@ export function PhaseTimeline({ currentPhase, compact }: PhaseTimelineProps): JS
                   right: '50%',
                   width: '100%',
                   height: compact ? 2 : 3,
-                  background: isPast || isCurrent ? 'var(--emr-success)' : 'var(--emr-border-color)',
+                  background: isPast || isCurrent ? 'var(--emr-accent)' : 'var(--emr-border-color)',
                   zIndex: 0,
                   borderRadius: 2,
                 }}
@@ -84,12 +81,13 @@ export function PhaseTimeline({ currentPhase, compact }: PhaseTimelineProps): JS
                 zIndex: 1,
                 color: dotColor,
                 fontWeight: 700,
-                boxShadow: isCurrent && !isFinished
-                  ? '0 0 0 4px rgba(49, 130, 206, 0.25)'
-                  : isFinished
-                    ? '0 0 0 4px rgba(34, 197, 94, 0.25)'
+                boxShadow: isCurrent
+                  ? '0 0 0 4px var(--emr-phase-glow)'
+                  : isActive
+                    ? '0 0 0 3px var(--emr-phase-glow-soft)'
                     : undefined,
-                animation: isCurrent ? 'pulse 2s infinite' : undefined,
+                animation: isCurrent && !isFinished ? 'timelinePulse 2s ease-in-out infinite' : undefined,
+                transition: 'all 0.3s ease',
               }}
             >
               {isPast || isFinished ? (
@@ -99,23 +97,20 @@ export function PhaseTimeline({ currentPhase, compact }: PhaseTimelineProps): JS
               )}
             </Box>
 
-            {/* Label */}
+            {/* Label — always visible */}
             <Text
               size="xs"
               ta="center"
               mt={compact ? 3 : 6}
               fw={isCurrent ? 700 : 400}
-              c={
-                isCurrent
-                  ? phase === 'finished' ? 'var(--emr-success)' : 'var(--emr-accent)'
-                  : isPast
-                    ? 'var(--emr-success)'
-                    : 'var(--emr-text-secondary)'
-              }
+              c={isActive ? 'var(--emr-accent)' : 'var(--emr-text-secondary)'}
               style={{
-                fontSize: compact ? 'var(--emr-font-xs)' : 'var(--emr-font-sm)',
-                whiteSpace: 'nowrap',
+                fontSize: compact ? 'clamp(9px, 0.65vw, 13px)' : 'clamp(10px, 0.8vw, 16px)',
                 lineHeight: 1.2,
+                width: '100%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               {t(`phase.${phase}`)}
@@ -125,9 +120,9 @@ export function PhaseTimeline({ currentPhase, compact }: PhaseTimelineProps): JS
       })}
 
       <style>{`
-        @keyframes pulse {
-          0%, 100% { box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.25); }
-          50% { box-shadow: 0 0 0 8px rgba(49, 130, 206, 0.08); }
+        @keyframes timelinePulse {
+          0%, 100% { box-shadow: 0 0 0 4px var(--emr-phase-glow); }
+          50% { box-shadow: 0 0 0 8px var(--emr-phase-glow-soft); }
         }
       `}</style>
     </Group>

@@ -7,16 +7,11 @@ export const PHASES = [
 
 export type SurgicalPhase = (typeof PHASES)[number];
 
-/** Procedure types */
-export const PROCEDURE_TYPES = [
-  'surgery',
-  'diagnostic',
-  'endoscopy',
-  'cardiac',
-  'other',
-] as const;
+/** Procedure type is now free-text (any string) */
+export type ProcedureType = string;
 
-export type ProcedureType = (typeof PROCEDURE_TYPES)[number];
+/** Department is now free-text (managed via Settings) */
+export type Department = string;
 
 /** Parsed tracking entry from a FHIR Basic resource */
 export interface TrackingEntry {
@@ -26,6 +21,7 @@ export interface TrackingEntry {
   currentPhase: SurgicalPhase;
   phaseUpdatedAt: string;
   procedureType: ProcedureType;
+  department: Department;
   notes: string;
   roomNumber: string;
   doctorName: string;

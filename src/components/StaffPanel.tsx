@@ -10,6 +10,7 @@ import {
   Center,
   Stack,
   Tooltip,
+  Autocomplete,
 } from '@mantine/core';
 import { EMRTextInput, EMRPasswordInput, EMRSelect, EMRTextarea, EMRNumberInput } from './ui/EMRFormFields';
 import { useMantineColorScheme } from '@mantine/core';
@@ -32,12 +33,16 @@ import {
   IconStethoscope,
   IconNotes,
   IconActivity,
+  IconBuilding,
+  IconSettings,
 } from '@tabler/icons-react';
 import { useTrackingData } from '../hooks/useTrackingData';
 import { PhaseTimeline } from './PhaseTimeline';
 import { createEntry, advancePhase, deleteEntry, updateEntry } from '../services/trackingService';
-import { PROCEDURE_TYPES, PHASES } from '../types/tracking';
-import type { ProcedureType, SurgicalPhase, TrackingEntry } from '../types/tracking';
+import { PHASES } from '../types/tracking';
+import type { SurgicalPhase, TrackingEntry } from '../types/tracking';
+import { getSettings, saveSettings } from '../services/settingsService';
+import type { AppSettings } from '../services/settingsService';
 import { t, getLang, setLang } from '../i18n';
 import { getConfig } from '../config';
 import styles from './StaffPanel.module.css';
@@ -53,10 +58,17 @@ export function StaffPanel(): JSX.Element {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const [lang, setLangState] = useState(getLang());
 
+  // Settings (departments & procedures saved in localStorage)
+  const [settings, setSettings] = useState<AppSettings>(getSettings);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [newSettingProc, setNewSettingProc] = useState('');
+  const [newSettingDept, setNewSettingDept] = useState('');
+
   // Add modal state
   const [addOpen, setAddOpen] = useState(false);
   const [newPatientName, setNewPatientName] = useState('');
-  const [newProcedure, setNewProcedure] = useState<ProcedureType>('surgery');
+  const [newProcedure, setNewProcedure] = useState('');
+  const [newDepartment, setNewDepartment] = useState('general-surgery');
   const [newNotes, setNewNotes] = useState('');
   const [newRoom, setNewRoom] = useState('');
   const [newDoctor, setNewDoctor] = useState('');
@@ -66,7 +78,8 @@ export function StaffPanel(): JSX.Element {
   // Edit modal state
   const [editEntry, setEditEntry] = useState<TrackingEntry | null>(null);
   const [editName, setEditName] = useState('');
-  const [editProcedure, setEditProcedure] = useState<ProcedureType>('surgery');
+  const [editProcedure, setEditProcedure] = useState('');
+  const [editDepartment, setEditDepartment] = useState('general-surgery');
   const [editNotes, setEditNotes] = useState('');
   const [editRoom, setEditRoom] = useState('');
   const [editDoctor, setEditDoctor] = useState('');
@@ -77,6 +90,7 @@ export function StaffPanel(): JSX.Element {
   // Search & filter
   const [search, setSearch] = useState('');
   const [phaseFilter, setPhaseFilter] = useState<SurgicalPhase | 'all'>('all');
+  const [deptFilter, setDeptFilter] = useState<string | 'all'>('all');
 
   // Elapsed time tick - re-render every 30s to update elapsed times
   const [, setTick] = useState(0);
@@ -174,6 +188,7 @@ export function StaffPanel(): JSX.Element {
       await createEntry(medplum, {
         patientName: newPatientName,
         procedureType: newProcedure,
+        department: newDepartment,
         notes: newNotes,
         roomNumber: newRoom,
         doctorName: newDoctor,
@@ -182,6 +197,8 @@ export function StaffPanel(): JSX.Element {
       notifications.show({ title: 'Success', message: 'Patient added', color: 'green' });
       setAddOpen(false);
       setNewPatientName('');
+      setNewProcedure('');
+      setNewDepartment('general-surgery');
       setNewNotes('');
       setNewRoom('');
       setNewDoctor('');
@@ -229,6 +246,7 @@ export function StaffPanel(): JSX.Element {
     setEditEntry(entry);
     setEditName(entry.patientName);
     setEditProcedure(entry.procedureType);
+    setEditDepartment(entry.department);
     setEditNotes(entry.notes);
     setEditRoom(entry.roomNumber);
     setEditDoctor(entry.doctorName);
@@ -244,6 +262,7 @@ export function StaffPanel(): JSX.Element {
       await updateEntry(medplum, editEntry.id, {
         patientName: editName,
         procedureType: editProcedure,
+        department: editDepartment,
         notes: editNotes,
         roomNumber: editRoom,
         doctorName: editDoctor,
@@ -277,10 +296,25 @@ export function StaffPanel(): JSX.Element {
     setLangState(next);
   };
 
-  const procedureOptions = PROCEDURE_TYPES.map((p) => ({
-    value: p,
-    label: t(`procedure.${p}`),
+  const departmentOptions = settings.departments.map((d) => ({
+    value: d,
+    label: t(`department.${d}`),
   }));
+
+  // Settings helpers
+  const addSettingItem = (list: 'procedures' | 'departments', value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed || settings[list].includes(trimmed)) return;
+    const updated = { ...settings, [list]: [...settings[list], trimmed] };
+    setSettings(updated);
+    saveSettings(updated);
+  };
+
+  const removeSettingItem = (list: 'procedures' | 'departments', index: number) => {
+    const updated = { ...settings, [list]: settings[list].filter((_, i) => i !== index) };
+    setSettings(updated);
+    saveSettings(updated);
+  };
 
   // ── Stats ───────────────────────────────────────────────────
 
@@ -293,6 +327,7 @@ export function StaffPanel(): JSX.Element {
 
   const filtered = entries.filter((e) => {
     if (phaseFilter !== 'all' && e.currentPhase !== phaseFilter) return false;
+    if (deptFilter !== 'all' && e.department !== deptFilter) return false;
     if (search) {
       const q = search.toLowerCase();
       return (
@@ -310,7 +345,9 @@ export function StaffPanel(): JSX.Element {
       {/* ── Header ─────────────────────────────────────────── */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
-          <IconHeartbeat size={30} stroke={1.5} />
+          <div className={styles.headerIcon}>
+            <IconHeartbeat size={24} stroke={1.5} />
+          </div>
           <div>
             <h1 className={styles.headerTitle}>{t('admin.title')}</h1>
             <div className={styles.headerSubtitle}>{t('admin.subtitle')}</div>
@@ -323,16 +360,20 @@ export function StaffPanel(): JSX.Element {
           <ActionIcon variant="subtle" color="white" size="lg" onClick={toggleTheme}>
             {colorScheme === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
           </ActionIcon>
-          <Button
-            leftSection={<IconPlus size={16} />}
-            variant="white"
-            color="dark"
-            size="compact-sm"
-            styles={{ root: { fontWeight: 600 }, label: { overflow: 'visible', height: 'auto' } }}
+          <Tooltip label={t('settings.title')}>
+            <ActionIcon variant="subtle" color="white" size="lg" onClick={() => setSettingsOpen(true)}>
+              <IconSettings size={20} />
+            </ActionIcon>
+          </Tooltip>
+          <div className={styles.headerDivider} />
+          <button
+            className={styles.headerAddBtn}
             onClick={() => setAddOpen(true)}
           >
+            <IconPlus size={18} stroke={2} />
             {t('admin.addPatient')}
-          </Button>
+          </button>
+          <div className={styles.headerDivider} />
           <Tooltip label={t('admin.logout')}>
             <ActionIcon variant="subtle" color="white" size="lg" onClick={handleLogout}>
               <IconLogout size={20} />
@@ -343,7 +384,7 @@ export function StaffPanel(): JSX.Element {
 
       {/* ── Stats Strip ────────────────────────────────────── */}
       <div className={styles.statsStrip}>
-        <div className={styles.statCard}>
+        <div className={`${styles.statCard} ${styles.statCardRegistered}`}>
           <div className={`${styles.statIcon} ${styles.statIconRegistered}`}>
             <IconClock size={22} />
           </div>
@@ -352,7 +393,7 @@ export function StaffPanel(): JSX.Element {
             <div className={styles.statLabel}>{t('admin.stats.registered')}</div>
           </div>
         </div>
-        <div className={styles.statCard}>
+        <div className={`${styles.statCard} ${styles.statCardOngoing}`}>
           <div className={`${styles.statIcon} ${styles.statIconOngoing}`}>
             <IconStethoscope size={22} />
           </div>
@@ -361,7 +402,7 @@ export function StaffPanel(): JSX.Element {
             <div className={styles.statLabel}>{t('admin.stats.ongoing')}</div>
           </div>
         </div>
-        <div className={styles.statCard}>
+        <div className={`${styles.statCard} ${styles.statCardFinished}`}>
           <div className={`${styles.statIcon} ${styles.statIconFinished}`}>
             <IconUser size={22} />
           </div>
@@ -381,6 +422,14 @@ export function StaffPanel(): JSX.Element {
           value={search}
           onChange={setSearch}
           size="sm"
+        />
+        <EMRSelect
+          data={[{ value: 'all', label: t('admin.filterAll') }, ...departmentOptions]}
+          value={deptFilter}
+          onChange={(val) => val && setDeptFilter(val)}
+          size="sm"
+          style={{ minWidth: 220 }}
+          leftSection={<IconBuilding size={16} />}
         />
         <div className={styles.filterChips}>
           {(['all', 'registered', 'ongoing', 'finished'] as const).map((phase) => (
@@ -414,6 +463,7 @@ export function StaffPanel(): JSX.Element {
                 <th>{t('admin.code')}</th>
                 <th>{t('admin.patient')}</th>
                 <th>{t('admin.procedure')}</th>
+                <th>{t('admin.department')}</th>
                 <th>{t('admin.room')}</th>
                 <th>{t('admin.doctor')}</th>
                 <th style={{ minWidth: 180 }}>{t('admin.phase')}</th>
@@ -446,7 +496,12 @@ export function StaffPanel(): JSX.Element {
                     </td>
                     <td>
                       <Badge variant="light" color="blue" size="sm">
-                        {t(`procedure.${entry.procedureType}`)}
+                        {entry.procedureType}
+                      </Badge>
+                    </td>
+                    <td>
+                      <Badge variant="light" color="teal" size="sm">
+                        {t(`department.${entry.department}`)}
                       </Badge>
                     </td>
                     <td>
@@ -490,7 +545,7 @@ export function StaffPanel(): JSX.Element {
                                   ? 'var(--emr-error)'
                                   : progressPct! > 75
                                     ? 'var(--emr-warning)'
-                                    : 'var(--emr-success)',
+                                    : 'var(--emr-phase-ongoing)',
                               }}
                             />
                           </div>
@@ -556,11 +611,11 @@ export function StaffPanel(): JSX.Element {
           content: { background: 'var(--emr-bg-modal)', overflow: 'hidden' },
         }}
       >
-        <div style={{ padding: '24px 28px 20px' }}>
+        <div style={{ padding: '16px 24px 14px' }}>
           {/* ── Header banner ─────────────────────────── */}
           <div className={styles.editModalHeader}>
             <div className={styles.editModalHeaderIcon}>
-              <IconPlus size={26} stroke={1.5} />
+              <IconPlus size={22} stroke={1.5} />
             </div>
             <div className={styles.editModalHeaderInfo}>
               <div className={styles.editModalHeaderName}>
@@ -568,7 +623,7 @@ export function StaffPanel(): JSX.Element {
               </div>
             </div>
             <span className={styles.editModalHeaderBadge}>
-              {t(`procedure.${newProcedure}`)}
+              {newProcedure || t('admin.procedure')}
             </span>
             <ActionIcon
               variant="subtle"
@@ -596,11 +651,18 @@ export function StaffPanel(): JSX.Element {
                 required
                 leftSection={<IconUser size={16} />}
               />
-              <EMRSelect
+              <Autocomplete
                 label={t('admin.procedure')}
-                data={procedureOptions}
+                placeholder={t('admin.procedurePlaceholder')}
                 value={newProcedure}
-                onChange={(val) => val && setNewProcedure(val as ProcedureType)}
+                onChange={setNewProcedure}
+                data={settings.procedures}
+              />
+              <EMRSelect
+                label={t('admin.department')}
+                data={departmentOptions}
+                value={newDepartment}
+                onChange={(val) => val && setNewDepartment(val)}
               />
             </div>
           </div>
@@ -649,10 +711,10 @@ export function StaffPanel(): JSX.Element {
               placeholder="Staff-only notes..."
               value={newNotes}
               onChange={setNewNotes}
-              rows={3}
+              rows={2}
               autosize
-              minRows={2}
-              maxRows={5}
+              minRows={1}
+              maxRows={3}
             />
           </div>
 
@@ -687,11 +749,11 @@ export function StaffPanel(): JSX.Element {
           content: { background: 'var(--emr-bg-modal)', overflow: 'hidden' },
         }}
       >
-        <div style={{ padding: '24px 28px 20px' }}>
+        <div style={{ padding: '16px 24px 14px' }}>
           {/* ── Header banner ─────────────────────────── */}
           <div className={styles.editModalHeader}>
             <div className={styles.editModalHeaderIcon}>
-              <IconEdit size={26} stroke={1.5} />
+              <IconEdit size={22} stroke={1.5} />
             </div>
             <div className={styles.editModalHeaderInfo}>
               <div className={styles.editModalHeaderName}>
@@ -702,7 +764,7 @@ export function StaffPanel(): JSX.Element {
               </div>
             </div>
             <span className={styles.editModalHeaderBadge}>
-              {t(`procedure.${editEntry?.procedureType ?? 'surgery'}`)}
+              {editEntry?.procedureType || t('admin.procedure')}
             </span>
             <ActionIcon
               variant="subtle"
@@ -730,11 +792,18 @@ export function StaffPanel(): JSX.Element {
                 required
                 leftSection={<IconUser size={16} />}
               />
-              <EMRSelect
+              <Autocomplete
                 label={t('admin.procedure')}
-                data={procedureOptions}
+                placeholder={t('admin.procedurePlaceholder')}
                 value={editProcedure}
-                onChange={(val) => val && setEditProcedure(val as ProcedureType)}
+                onChange={setEditProcedure}
+                data={settings.procedures}
+              />
+              <EMRSelect
+                label={t('admin.department')}
+                data={departmentOptions}
+                value={editDepartment}
+                onChange={(val) => val && setEditDepartment(val)}
               />
             </div>
           </div>
@@ -783,9 +852,9 @@ export function StaffPanel(): JSX.Element {
               {PHASES.map((phase) => {
                 const isActive = editPhase === phase;
                 const dotColor =
-                  phase === 'registered' ? 'var(--emr-accent)'
-                    : phase === 'ongoing' ? 'var(--emr-warning)'
-                    : 'var(--emr-success)';
+                  phase === 'registered' ? 'var(--emr-phase-registered)'
+                    : phase === 'ongoing' ? 'var(--emr-phase-ongoing)'
+                    : 'var(--emr-phase-finished)';
                 return (
                   <button
                     key={phase}
@@ -817,10 +886,10 @@ export function StaffPanel(): JSX.Element {
               placeholder="Staff-only notes..."
               value={editNotes}
               onChange={setEditNotes}
-              rows={3}
+              rows={2}
               autosize
-              minRows={2}
-              maxRows={5}
+              minRows={1}
+              maxRows={3}
             />
           </div>
 
@@ -838,6 +907,153 @@ export function StaffPanel(): JSX.Element {
             >
               {t('admin.save')}
             </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* ── Settings Modal ──────────────────────────────── */}
+      <Modal
+        opened={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        centered
+        size="lg"
+        withCloseButton={false}
+        padding={0}
+        radius="lg"
+        styles={{
+          content: { background: 'var(--emr-bg-modal)', overflow: 'hidden' },
+        }}
+      >
+        <div style={{ padding: '16px 24px 14px' }}>
+          {/* ── Header banner ─────────────────────────── */}
+          <div className={styles.editModalHeader}>
+            <div className={styles.editModalHeaderIcon}>
+              <IconSettings size={22} stroke={1.5} />
+            </div>
+            <div className={styles.editModalHeaderInfo}>
+              <div className={styles.editModalHeaderName}>
+                {t('settings.title')}
+              </div>
+            </div>
+            <ActionIcon
+              variant="subtle"
+              color="white"
+              size="lg"
+              onClick={() => setSettingsOpen(false)}
+              style={{ flexShrink: 0 }}
+            >
+              <IconPlus size={20} style={{ transform: 'rotate(45deg)' }} />
+            </ActionIcon>
+          </div>
+
+          {/* ── Section: Procedures ─────────────────────── */}
+          <div className={styles.editSection}>
+            <div className={styles.editSectionLabel}>
+              <IconStethoscope size={15} />
+              {t('settings.procedures')}
+            </div>
+            <div className={styles.settingsItemList}>
+              {settings.procedures.length === 0 && (
+                <div className={styles.settingsEmptyState}>
+                  <IconStethoscope size={28} stroke={1} style={{ opacity: 0.3 }} />
+                  <span>{t('settings.empty')}</span>
+                </div>
+              )}
+              {settings.procedures.map((item, i) => (
+                <div key={i} className={styles.settingsItem}>
+                  <span className={styles.settingsItemIndex}>{i + 1}</span>
+                  <span className={styles.settingsItemText}>{item}</span>
+                  <button
+                    className={styles.settingsItemDelete}
+                    onClick={() => removeSettingItem('procedures', i)}
+                  >
+                    <IconTrash size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className={styles.settingsAddRow}>
+              <EMRTextInput
+                placeholder={t('settings.addPlaceholder')}
+                value={newSettingProc}
+                onChange={setNewSettingProc}
+                style={{ flex: 1 }}
+                size="sm"
+                leftSection={<IconPlus size={14} />}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    addSettingItem('procedures', newSettingProc);
+                    setNewSettingProc('');
+                  }
+                }}
+              />
+              <Button
+                size="sm"
+                variant="light"
+                disabled={!newSettingProc.trim()}
+                onClick={() => {
+                  addSettingItem('procedures', newSettingProc);
+                  setNewSettingProc('');
+                }}
+              >
+                {t('settings.add')}
+              </Button>
+            </div>
+          </div>
+
+          {/* ── Section: Departments ────────────────────── */}
+          <div className={styles.editSection} style={{ marginBottom: 0 }}>
+            <div className={styles.editSectionLabel}>
+              <IconBuilding size={15} />
+              {t('settings.departments')}
+            </div>
+            <div className={styles.settingsItemList}>
+              {settings.departments.length === 0 && (
+                <div className={styles.settingsEmptyState}>
+                  <IconBuilding size={28} stroke={1} style={{ opacity: 0.3 }} />
+                  <span>{t('settings.empty')}</span>
+                </div>
+              )}
+              {settings.departments.map((item, i) => (
+                <div key={i} className={styles.settingsItem}>
+                  <span className={styles.settingsItemIndex}>{i + 1}</span>
+                  <span className={styles.settingsItemText}>{t(`department.${item}`)}</span>
+                  <button
+                    className={styles.settingsItemDelete}
+                    onClick={() => removeSettingItem('departments', i)}
+                  >
+                    <IconTrash size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className={styles.settingsAddRow}>
+              <EMRTextInput
+                placeholder={t('settings.addPlaceholder')}
+                value={newSettingDept}
+                onChange={setNewSettingDept}
+                style={{ flex: 1 }}
+                size="sm"
+                leftSection={<IconPlus size={14} />}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    addSettingItem('departments', newSettingDept);
+                    setNewSettingDept('');
+                  }
+                }}
+              />
+              <Button
+                size="sm"
+                variant="light"
+                disabled={!newSettingDept.trim()}
+                onClick={() => {
+                  addSettingItem('departments', newSettingDept);
+                  setNewSettingDept('');
+                }}
+              >
+                {t('settings.add')}
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>

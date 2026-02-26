@@ -20,4 +20,5 @@ export const TRACKING_EXTENSIONS = {
   ROOM_NUMBER: `${FHIR_BASE_URL}/StructureDefinition/tracking-room-number`,
   DOCTOR_NAME: `${FHIR_BASE_URL}/StructureDefinition/tracking-doctor-name`,
   ESTIMATED_DURATION: `${FHIR_BASE_URL}/StructureDefinition/tracking-estimated-duration`,
+  DEPARTMENT: `${FHIR_BASE_URL}/StructureDefinition/tracking-department`,
 } as const;
