@@ -87,12 +87,17 @@ export function useAutoFitDisplay(
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const layout: Layout = layoutOverride ?? 'grid';
+      const isMobile = vw < 480;
 
+      // On mobile the header wraps to 2 rows, so chrome is taller
+      const chromeHeight = isMobile ? 280 : CHROME_HEIGHT;
       // Only 1 dept header per page — that's the key difference
-      const available = vh - CHROME_HEIGHT - DEPT_HEADER_HEIGHT;
+      const available = vh - chromeHeight - DEPT_HEADER_HEIGHT;
 
+      // On phones, use a smaller min column width so cards fit
+      const colWidth = isMobile ? 280 : COL_WIDTHS[layout];
       const cols =
-        layout === 'list' ? 1 : Math.max(1, Math.floor(vw / COL_WIDTHS[layout]));
+        layout === 'list' ? 1 : Math.max(1, Math.floor(vw / colWidth));
       const rowHeight = ROW_HEIGHTS[layout];
       const rows = available > 0 ? Math.max(1, Math.floor(available / rowHeight)) : 1;
       const cardsPerPage = cols * rows;

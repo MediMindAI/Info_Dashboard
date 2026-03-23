@@ -210,6 +210,19 @@
   }
 }
 
+/* Mobile phones — slightly tighter typography */
+@media (max-width: 480px) {
+  :root {
+    --emr-font-xs: 10px;
+    --emr-font-sm: 12px;
+    --emr-font-md: 13px;
+    --emr-font-lg: 15px;
+    --emr-font-xl: 17px;
+    --emr-font-2xl: 19px;
+    --emr-font-3xl: 22px;
+  }
+}
+
 /* Global styles */
 body {
   margin: 0;

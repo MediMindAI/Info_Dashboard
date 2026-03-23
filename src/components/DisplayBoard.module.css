@@ -506,3 +506,141 @@
 :global(:root[data-mantine-color-scheme="dark"]) .chipProcedure {
   background: rgba(49, 130, 206, 0.18);
 }
+
+/* -- Tablet responsive ------------------------------------ */
+
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .clock {
+    font-size: 24px;
+  }
+}
+
+/* -- Mobile responsive ------------------------------------ */
+
+@media (max-width: 480px) {
+  .container {
+    padding: 8px 10px;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    gap: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .headerLeft {
+    gap: 10px;
+  }
+
+  .headerLeft svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .headerRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .clock {
+    font-size: 20px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card {
+    padding: 12px 14px 10px;
+    border-radius: 12px;
+  }
+
+  .patientName {
+    font-size: 16px;
+  }
+
+  .trackingCode {
+    font-size: 11px;
+  }
+
+  .infoChip {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  .timeDisplay {
+    font-size: 14px;
+  }
+
+  .remainingBadge {
+    font-size: 9px;
+  }
+
+  .card_list {
+    grid-template-columns: 1fr;
+    padding: 10px 14px;
+    gap: 6px;
+  }
+
+  .cardLeft {
+    padding-right: 0;
+  }
+
+  .cardCenter {
+    justify-content: flex-start;
+    padding: 4px 0;
+  }
+
+  .cardRight {
+    align-items: flex-start;
+  }
+
+  .departmentSection {
+    margin-bottom: 12px;
+  }
+
+  .departmentHeader {
+    padding: 8px 12px;
+    margin-bottom: 10px;
+  }
+
+  .departmentTitle {
+    font-size: 16px;
+  }
+
+  .departmentCount {
+    font-size: 11px;
+    padding: 2px 10px;
+  }
+
+  .pageIndicator {
+    display: none;
+  }
+
+  .progressBar {
+    height: 4px;
+  }
+
+  .emptyState svg {
+    width: 48px;
+    height: 48px;
+  }
+}

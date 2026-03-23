@@ -144,7 +144,7 @@ export function StaffPanel(): JSX.Element {
   if (!profile || localStorage.getItem('adminLoggedOut') === 'true') {
     return (
       <Center mih="100vh" style={{ background: 'var(--emr-bg-page)' }}>
-        <Stack align="center" gap="lg" style={{ width: 340 }}>
+        <Stack align="center" gap="lg" style={{ width: '100%', maxWidth: 340, padding: '0 16px' }}>
           <IconHeartbeat size={64} stroke={1.5} color="var(--emr-accent)" />
           <Text size="xl" fw={700} c="var(--emr-text-primary)">MediMind Info Display</Text>
           <Text c="var(--emr-text-secondary)">{t('admin.title')}</Text>
@@ -428,7 +428,7 @@ export function StaffPanel(): JSX.Element {
           value={deptFilter}
           onChange={(val) => val && setDeptFilter(val)}
           size="sm"
-          style={{ minWidth: 220 }}
+          style={{ minWidth: 160, flex: 1 }}
           leftSection={<IconBuilding size={16} />}
         />
         <div className={styles.filterChips}>

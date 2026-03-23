@@ -566,10 +566,97 @@
   }
   .filterBar {
     padding: 0 16px 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchInput {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+  .filterChips {
+    width: 100%;
   }
   .tableWrapper {
     padding: 0 16px 16px;
     overflow-x: auto;
+  }
+  .table {
+    min-width: 900px;
+  }
+}
+
+/* ── Mobile (phones) ─────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .header {
+    padding: 10px 12px;
+  }
+  .headerTitle {
+    font-size: 18px;
+  }
+  .headerSubtitle {
+    display: none;
+  }
+  .headerAddBtn {
+    padding: 7px 10px;
+    font-size: 0;
+    gap: 0;
+  }
+  .headerAddBtn svg {
+    font-size: initial;
+    width: 18px;
+    height: 18px;
+  }
+  .headerDivider {
+    height: 18px;
+    margin: 0 2px;
+  }
+  .statsStrip {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .statCard {
+    min-width: calc(50% - 6px);
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .statIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .statValue {
+    font-size: 22px;
+  }
+  .statLabel {
+    font-size: 10px;
+  }
+  .filterBar {
+    padding: 0 12px 10px;
+    gap: 8px;
+  }
+  .filterChip {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .tableWrapper {
+    padding: 0 12px 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .emptyState {
+    padding: 40px 16px;
+  }
+  .editModalHeader {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .editModalHeaderName {
+    font-size: var(--emr-font-lg);
+  }
+  .editModalHeaderBadge {
+    padding: 4px 10px;
+    font-size: 12px;
   }
 }
 
