@@ -294,8 +294,6 @@ function PatientCard({ entry, layout }: { entry: TrackingEntry; layout: CardLayo
     remainingMin = Math.max(0, Math.ceil((totalMs - elapsedMs) / 60_000));
   }
 
-  const isOvertime = progressPct !== null && progressPct >= 100;
-
   const isList = layout === 'list';
 
   const phaseClass = entry.currentPhase === 'finished'
